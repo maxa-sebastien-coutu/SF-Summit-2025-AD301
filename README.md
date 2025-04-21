@@ -90,6 +90,56 @@ snow snowpark deploy
 snow cortex complete
 ```
 
+## DEPLOY - Release Channels
+
+### Snow CLI commands
+
+
+- Registering/Deregistering a version
+```sql
+ALTER APPLICATION PACKAGE REGISTER VERSION <version_name> USING ‘@stage/path’;
+ALTER APPLICATION PACKAGE REGISTER PATCH FOR VERSION <version_name> USING ‘@stage/path’;
+ALTER APPLICATION PACKAGE DEREGISTER VERSION <version_name>;
+```
+- Dropping a version from channel: A version must not be used by any of the release directives of a channel
+```sql
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> DROP VERSION <version_name>;
+```
+- Adding a version to a release channel. 
+```sql
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> ADD VERSION <version_name>;
+```
+- Dropping a version from channel: A version must not be used by any of the release directives of a channel
+```sql
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> DROP VERSION <version_name>;
+```
+- Setting release directives
+```sql
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> SET DEFAULT RELEASE DIRECTIVE VERSION=<version_name> PATCH=<patch>;
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> SET RELEASE DIRECTIVE <directive> VERSION=<version_name> PATCH=<patch> TARGET_ACCOUNTS=org1.a1,org2.a2;
+```
+- Channels must be targeted to a specific consumer
+```sql
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> ADD TARGET_ACCOUNTS=org1.a1, org1.a2;
+ALTER APPLICATION PACKAGE <app_pkg> MODIFY RELEASE CHANNEL <channel_name> REMOVE TARGET_ACCOUNTS=org1.a1, org1.a2;
+```
+- Default Channel if not release channel is specified. 
+```sql
+CREATE APPLICATION <app_name> FROM LISTING <LISTING_ID>;
+```
+- Consumer is allowed to specify channel when creating an instance
+```sql
+CREATE APPLICATION <app_name> FROM LISTING <LISTING_ID> USING RELEASE CHANNEL ALPHA;
+```
+- Consumer can view available channels via listing
+```sql
+SHOW AVAILABLE RELEASE CHANNELS IN LISTING <LISTING_ID>;
+```
+- New Privilege for using non-default channels or unreviewed channels
+```sql
+CREATE PREVIEW APPLICATION;
+```
+
 ## License
 
 This repository contains example code and documentation to support the "Mastering CI/CD for Snowflake Native Apps" presentation.
